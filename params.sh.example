@@ -1,0 +1,9 @@
+# whisper installation dir, below are default with instructions in README.md, for other see original whisper.cpp repo instructions
+WHISPER_MAIN="/example/path/rants_and_memos/whisper.cpp/main"
+WHISPER_MODEL="/example/path/rants_and_memos/whisper.cpp/models/ggml-medium.en-q5_0.bin"
+# define below paths
+RANTS_OUTPUT_DIR="/example/path/rants_and_memos/rants/"
+MEMOS_OUTPUT_DIR="/example/path/rants_and_memos/rants/"
+TMP_DIR="/example/path/rants_and_memos/tmp/"
+# Apple ussualy stores in this path
+MEMOS_INPUT_DIR="/Users/your_login/Library/Containers/com.apple.VoiceMemos/Data/Library/Application Support/Recordings"

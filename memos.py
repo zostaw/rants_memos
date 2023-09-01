@@ -31,29 +31,30 @@ def m4a_to_wav(m4a_file, out_dir):
     return wav_file
 
 
-def whisper_process(m4a_file, output_dir, WHISPER_DIR):
+def whisper_process(m4a_file, output_dir, whisper_main, whisper_model, tmp_dir):
     # transposes wav_filename from tmp_dir
     # saves into a transposed_filename in output_dir
     # returns: transposed_filename [.txt]
 
-    os.chdir(WHISPER_DIR)
-    TMP_DIR = WHISPER_DIR / "tmp"
+    if not tmp_dir.exists():
+        os.makedirs(tmp_dir)
 
-    if not TMP_DIR.exists():
-        os.makedirs(TMP_DIR)
+    if not output_dir.exists():
+        os.makedirs(output_dir)
 
     # preprocess - whisper requires wav 16kHz
-    wav_file = m4a_to_wav(m4a_file, TMP_DIR)
+    wav_file = m4a_to_wav(m4a_file, tmp_dir)
 
     # define paths
     output_filename = wav_file.with_suffix(".md").name
-    output_file = OUTPUT_DIR / output_filename
+    output_file = output_dir / output_filename
 
     with open(output_file, "a") as file:
         # make section with metadata
         file.write(f"# MEMO {m4a_file.stem}\n")
+        print(f"Executing whisper for {m4a_file.stem}")
         out = subprocess.run(
-            ["./main", "-m", "models/ggml-medium.en-q5_0.bin", "-f", wav_file],
+            [whisper_main, "-m", whisper_model, "-f", wav_file],
             capture_output=True,
             text=True,
         )
@@ -66,7 +67,7 @@ def whisper_process(m4a_file, output_dir, WHISPER_DIR):
 def get_source_list(source_dir):
     if not source_dir.exists():
         raise Exception(
-            "Source dir cannot be accessed. Check if it exists and if you have right privileges."
+            f"Source dir {source_dir} cannot be accessed. Check if it exists and if you have right privileges."
         )
     source_list = []
     source_dir_contents = Path(source_dir)
@@ -89,24 +90,51 @@ def save_processed_list(processed_list, processed_list_file):
         json.dump(processed_list, file)
 
 
+def source_params(params_file):
+    variables = {}
+    with open(params_file, "r") as params_file:
+        for line in params_file:
+            # Remove leading and trailing whitespace
+            line = line.strip()
+
+            # Check if the line is a variable assignment
+            if "=" in line:
+                # Split the line into variable name and value
+                var_name, var_value = line.split("=", 1)
+
+                # Remove any surrounding quotes from the value
+                var_value = var_value.strip("\"'")
+
+                # Set the variable in Python (e.g., in a dictionary)
+                variables[var_name] = Path(var_value)
+    return variables
+
+
 if __name__ == "__main__":
     # source dir - dir containing m4a files to transcribe
     # output_dit - transcriptions destination
-    WHISPER_DIR = Path("<whisper.cpp path>")
-    SOURCE_DIR = Path(
-        "/Users/<your login name>/Library/Application Support/com.apple.voicememos/Recordings"
-    )
-    OUTPUT_DIR = Path("<your output dir>")
+    PARAMS = source_params("params.sh")
 
-    source_list = get_source_list(SOURCE_DIR)
-    processed_list_file = SOURCE_DIR / "processed.txt"
+    MEMOS_INPUT_DIR = PARAMS["MEMOS_INPUT_DIR"]
+    MEMOS_OUTPUT_DIR = PARAMS["MEMOS_OUTPUT_DIR"]
+    WHISPER_MAIN = PARAMS["WHISPER_MAIN"]
+    WHISPER_MODEL = PARAMS["WHISPER_MODEL"]
+    MEMOS_OUTPUT_DIR = PARAMS["MEMOS_OUTPUT_DIR"]
+    TMP_DIR = PARAMS["TMP_DIR"]
+
+    source_list = get_source_list(MEMOS_INPUT_DIR)
+    processed_list_file = MEMOS_INPUT_DIR / "processed.txt"
     processed_list = load_processed_list(processed_list_file)
 
     for m4a_file in source_list:
         if locals()["processed_list"] and m4a_file in processed_list:
             continue
         processed_filename = whisper_process(
-            SOURCE_DIR / m4a_file, OUTPUT_DIR, WHISPER_DIR
+            MEMOS_INPUT_DIR / m4a_file,
+            MEMOS_OUTPUT_DIR,
+            WHISPER_MAIN,
+            WHISPER_MODEL,
+            TMP_DIR,
         )
         processed_list.append(str(processed_filename))
 

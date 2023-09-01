@@ -1,0 +1,6 @@
+params.sh
+*.out
+tmp/*
+!tmp/
+rants/*
+!rants/
