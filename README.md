@@ -8,8 +8,8 @@ This project uses whisper.cpp to provide transcription tool for:
 
 ## rants.sh
 
-*rants.sh* listens to microphone input until it is stopped with ^C. 
-Once it's finished, it transcribes the note into text file stored in *RANTS_OUTPUT_DIR/<today date>.md*
+*rants.sh* listens to microphone input until it is stopped with ^C.   
+Once it's finished, it transcribes the note into text file stored in *RANTS_OUTPUT_DIR/<today date>.md*  
 If recorded multiple memos, they are all appended to file, but separate md sections are created, for example:
 
 ```RANTS_OUTPUT_DIR/2023-09-01.md
@@ -29,13 +29,13 @@ because ultimately I want to move the memos and RANTS as a separate module, sub-
 
 ## memos.py
 
-*memos.py* transcribes all *.m4a files placed in MEMOS_INPUT_DIR. 
-I use it for my Apple Voice Memos transcription as they synchronize automaticaly with my computer,
-but there's no reason to try to use it on another directory.
-The program can be executed multiple times on the same directory, it will ommit already processed.
-To ensure that, it creates a json file *processed.txt* (sorry about the unpure extension :p).
-All memos are saved in file under MEMOS_OUTPUT_DIR in single file *memo.md* and separated with markdown sections.
-The sections contain original path, ie.:
+*memos.py* transcribes all *.m4a files placed in MEMOS_INPUT_DIR.  
+I use it for my Apple Voice Memos transcription as they synchronize automaticaly with my computer,  
+but there's no reason to try to use it on another directory.  
+The program can be executed multiple times on the same directory, it will ommit already processed.  
+To ensure that, it creates a json file *processed.txt* (sorry about the unpure extension :p).  
+All memos are saved in file under MEMOS_OUTPUT_DIR in single file *memo.md* and separated with markdown sections.  
+The sections contain original path, ie.:  
 
 ```MEMOS_OUTPUT_DIR/memo.md
 # /Users/zostaw/Library/Application Support/com.apple.voicememos/Recordings/20230204 175104-266B2F99.m4a
@@ -64,7 +64,7 @@ git submodule update
 
 ## Install python virtualenv (at least 3.10.5)
 
-Use your favorite approach to install python venv, for example:
+Use your favorite approach to install python venv, for example:  
 ```bash
 python -m venv venv
 source venv/bin/activate
@@ -72,8 +72,8 @@ source venv/bin/activate
 
 ## Download weights, setup a model
 
-Follow the instructions from original repo - https://github.com/ggerganov/whisper.cpp
-Or below, for the time being (2023-09-01), this is setup fo Macbook M1:
+Follow the instructions from original repo - https://github.com/ggerganov/whisper.cpp  
+Or below, for the time being (2023-09-01), this is setup fo Macbook M1:  
 
 ```bash
 cd scripts/whisper.cpp
@@ -101,7 +101,7 @@ make clean
 WHISPER_COREML=1 make -j
 ```
 
-After whisper.cpp is installed, copy *params.sh.example* to *params.sh* and setup paths, i.e.:
+After whisper.cpp is installed, copy *params.sh.example* to *params.sh* and setup paths, i.e.:  
 ```bash
 # whisper installation dir and model path
 WHISPER_MAIN="/example/path/rants_and_memos/whisper.cpp/main"
