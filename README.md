@@ -9,7 +9,7 @@ This project uses whisper.cpp to provide transcription tool for:
 ## rants.sh
 
 *rants.sh* listens to microphone input until it is stopped with ^C.   
-Once it's finished, it transcribes the note into text file stored in *RANTS_OUTPUT_DIR/<today date>.md*  
+Once it's finished, it transcribes the note into text file stored in *RANTS_OUTPUT_DIR/\<today date\>.md*  
 If recorded multiple memos, they are all appended to file, but separate md sections are created, for example:
 
 ```RANTS_OUTPUT_DIR/2023-09-01.md
