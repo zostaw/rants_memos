@@ -7,3 +7,5 @@ MEMOS_OUTPUT_DIR="/example/path/rants_and_memos/rants/"
 TMP_DIR="/example/path/rants_and_memos/tmp/"
 # Apple ussualy stores in this path
 MEMOS_INPUT_DIR="/Users/your_login/Library/Containers/com.apple.VoiceMemos/Data/Library/Application Support/Recordings"
+# or this:
+#MEMOS_INPUT_DIR="Users/your_login/Library/Group Containers/group.com.apple.VoiceMemos.shared/Recordings/"
